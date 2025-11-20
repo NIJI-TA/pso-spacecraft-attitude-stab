@@ -32,20 +32,24 @@ def run_pso(
     for i in range(4):
         particles[:, i, :] = np.random.uniform(param_min[i], param_max[i], (s, n))
         velocities[:, i, :] = np.random.uniform(
-            0.15 * param_min[i], 0.15 * param_max[i], (s, n)
+            -0.15 * (param_max[i] - param_min[i]),
+            0.15 * (param_max[i] - param_min[i]),
+            (s, n),
         )
 
     pbest = particles.copy()
     value_at_pbest = np.full(s, np.inf)
-    # глобальное лучшее на первой итерации сразу перезапишется
-    gbest = particles[0].copy()
-    # значение целевой функции в gbest
-    value_at_gbest = np.inf
+
+    gbest = particles[
+        0
+    ].copy()  # глобальное лучшее на первой итерации сразу перезапишется
+    value_at_gbest = np.inf  # значение целевой функции в gbest
     # Список для хранения значений целевой функции на каждой итерации для анализа сходимости
-    convergence = []
+
+    conv = []  # Для анализа сходимости
 
     # PSO
-    for i in tqdm(range(max_iter), desc="Итерации", unit="итерация"):
+    for i in tqdm(range(max_iter), desc="Итерации PSO", unit="итерация"):
         # Идем по каждой частице
         for j in range(s):
             # Моделируем
@@ -71,7 +75,7 @@ def run_pso(
                 # Eсли текущее значение меньше глобально лучшего, то запоминаем значение и управление
                 value_at_gbest = current_function
                 gbest = particles[j].copy()
-        convergence.append(value_at_gbest)
+        conv.append(value_at_gbest)
         # Обновление скоростей и позиций согласно методу
         w = (w_low - w_up) * (i / max_iter) + w_up
         c1 = (c1_low - c1_up) * (i / max_iter) + c1_up
@@ -86,24 +90,18 @@ def run_pso(
         particles += velocities
         # Ограничение управления
         for k in range(4):
-            mask_min = particles[:, k, :] < param_min[k]
-            mask_max = particles[:, k, :] > param_max[k]
-
-            particles[:, k, :][mask_min] = np.random.uniform(
-                param_min[k], param_max[k], mask_min.sum()
-            )
-            particles[:, k, :][mask_max] = np.random.uniform(
-                param_min[k], param_max[k], mask_max.sum()
-            )
+            particles[:, k, :] = np.clip(particles[:, k, :], param_min[k], param_max[k])
 
             mask_min = velocities[:, k, :] < 0.15 * param_min[k]
             mask_max = velocities[:, k, :] > 0.15 * param_max[k]
 
+            v_max = 0.15 * (param_max[k] - param_min[k])
+
             velocities[:, k, :][mask_min] = np.random.uniform(
-                0.15 * param_min[k], 0.15 * param_max[k], mask_min.sum()
+                -v_max, v_max, mask_min.sum()
             )
             velocities[:, k, :][mask_max] = np.random.uniform(
-                0.15 * param_min[k], 0.15 * param_max[k], mask_max.sum()
+                -v_max, v_max, mask_max.sum()
             )
 
-    return gbest, value_at_gbest, convergence
+    return gbest, value_at_gbest, conv
