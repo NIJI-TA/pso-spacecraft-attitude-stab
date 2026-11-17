@@ -20,7 +20,6 @@ def run_sa(
     matrix_1,
     t_max=1000.0,  # начальная температура
     t_min=1e-9,  # температура остановки
-    e_min=1e-6,  # энергия остановки
     alpha=0.98,  # коэффициент уменьшения температуры
     candidat_coef=0.1,  # для поиска кандидатов
 ):
@@ -53,10 +52,9 @@ def run_sa(
     # === SA
     for _ in tqdm(range(max_iter), desc="Итерации SA", unit="итерация"):
         # Проверка условий остановки
-        if t < t_min or current_energy < e_min:
+        if t < t_min:
             break
-
-        # 2.1. Генерация нового кандидатного решения (возмущение)
+        # Генерация нового решения (возмущение)
         new_solution = candidate(current_solution, param_min, param_max, candidat_coef)
 
         # Вычисляем целевую функцию (энергию для SA)
@@ -73,16 +71,15 @@ def run_sa(
             h,
         )
 
-        # Находим разницу энергий (нового решения и текущего)
+        # Разница энергий
         delta_e = new_energy - current_energy
 
-        # Решаем, принимаем новое решение или нет
+        # Решаем, принимать новое решение или нет
         if accept_or_not(delta_e, t):
-            # Принимаем
             current_solution = new_solution.copy()
             current_energy = new_energy
 
-            # Обновляем лучшее решение, если было какое-то улучшение
+            # Обновляем лучшее решение
             if new_energy < best_energy:
                 best_solution = new_solution.copy()
                 best_energy = new_energy

@@ -40,8 +40,7 @@ def function_phi(
     )
     OmegaY = OMEGA_0 * (
         omega_vec[:, 1]
-        - 2
-        * (
+        - (
             lambd_vec[:, 0] * lambd_vec[:, 0]
             - lambd_vec[:, 1] * lambd_vec[:, 1]
             + lambd_vec[:, 2] * lambd_vec[:, 2]

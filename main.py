@@ -40,10 +40,10 @@ lambd_vec_1 = to_Rodrigo_Hamilton(phi1, psi1, theta1)
 matrix_1 = to_transition_matrix(lambd_vec_1)
 
 # === Параметры! PSO + SA
-s = 20  # число частиц (PSO)
+s = 30  # число частиц (PSO)
 n = 1  # число интервалов для коэффициентов усиления
-max_iter_pso = 100
-max_iter_sa = 1500
+max_iter_pso = 200
+max_iter_sa = 1000
 h = 0.02
 u_max = 25.0
 param_min = np.array([0.0, 1.0e6, 500.0, 0.5e9])

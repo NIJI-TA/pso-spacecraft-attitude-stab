@@ -4,3 +4,5 @@
 Методы:
 - Метод роя частиц (Particle swarm optimisation - PSO)
 - Метод имитации отжига (Simulated annealing - SA)
+
+Различные виды неизвестных и случайных возмущений.

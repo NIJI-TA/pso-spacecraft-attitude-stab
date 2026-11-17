@@ -421,7 +421,7 @@ def simulate_dinamics(
         m_DM = calc_M_DM_quadrupole(
             matrix, domega, hm, b_c
         )  # Есть обычный, modified, quadrupole и modified_quadrupole
-        # m_Dist = calc_M_Dist_6(u, array_1, array_2, array_3, array_4, array_5, array_6)
+        m_Dist = calc_M_Dist_6(u, array_1, array_2, array_3, array_4, array_5, array_6)
         # m_Dist = calc_M_Dist_2(u)
 
         # Параметры из системы
@@ -454,13 +454,13 @@ def simulate_dinamics(
             - K0 * lambd_3 * (lambd_0**2 + lambd_1**2 + lambd_2**2 + lambd_3**2 - 1)
         )
         dOmega_x = -(EPSILON - DELTA) * (Omega_y * Omega_z - beta_2 * beta_3) + (
-            m_L[0] + m_M[0] + m_DL[0] + m_DM[0]  # + m_Dist[0]
+            m_L[0] + m_M[0] + m_DL[0] + m_DM[0] + m_Dist[0]
         ) / (J_A * OMEGA_0**2)
         dOmega_y = -((1 - EPSILON) / DELTA) * (Omega_z * Omega_x - beta_1 * beta_3) + (
-            m_L[1] + m_M[1] + m_DL[1] + m_DM[1]  # + m_Dist[1]
+            m_L[1] + m_M[1] + m_DL[1] + m_DM[1] + m_Dist[1]
         ) / (DELTA * J_A * OMEGA_0**2)
         dOmega_z = -((DELTA - 1) / EPSILON) * (Omega_x * Omega_y - beta_2 * beta_1) + (
-            m_L[2] + m_M[2] + m_DL[2] + m_DM[2]  # + m_Dist[2]
+            m_L[2] + m_M[2] + m_DL[2] + m_DM[2] + m_Dist[2]
         ) / (EPSILON * J_A * OMEGA_0**2)
 
         return [dlambd_0, dlambd_1, dlambd_2, dlambd_3, dOmega_x, dOmega_y, dOmega_z]

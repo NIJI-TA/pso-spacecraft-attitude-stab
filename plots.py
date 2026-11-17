@@ -259,3 +259,16 @@ def plot_hm_two_methods(hm1, hm2, n, u_max, param_min, param_max):
     plt.legend(fontsize=16, edgecolor="grey", loc="lower right", fancybox=False)
     plt.tight_layout()
     plt.show()
+
+
+def plot_boxplot_objective(J_pso, J_sa):
+    plt.figure(figsize=(8, 5))
+
+    plt.boxplot([J_pso, J_sa], labels=["Метод PSO", "Метод SA"], showfliers=True)
+
+    plt.ylabel("Значение функционала", fontsize=16)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
